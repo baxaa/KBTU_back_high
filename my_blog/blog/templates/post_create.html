@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create New Post</title>
+</head>
+<body>
+    <h1>Create a New Blog Post</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Display the form fields -->
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="{% url 'post_list' %}">Back to All Posts</a>
+</body>
+</html>
