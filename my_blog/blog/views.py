@@ -10,32 +10,30 @@ from .forms import UserRegisterForm
 from django.core.paginator import Paginator
 
 
-# Create your views here.
 def blog(request):
     return "Hello World!"
 
 
-# List view for all blog posts
 def post_list(request):
-    posts = Post.objects.all().order_by('-created_at')  # Get all posts ordered by newest first
-    paginator = Paginator(posts, 5)  # Show 5 posts per page
+    posts = Post.objects.all().order_by('-created_at')
+    paginator = Paginator(posts, 5)
 
-    page_number = request.GET.get('page')  # Get the page number from the request
-    page_obj = paginator.get_page(page_number)  # Get the posts for the current page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'post_list.html', {'page_obj': page_obj})
 
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()  # Get all comments related to the post
+    comments = post.comments.all()
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
-            comment.post = post  # Link the comment to the current post
-            comment.author = request.user  # Set the current user as the author
+            comment.post = post
+            comment.author = request.user
             comment.save()
             return redirect('post_detail', post_id=post.id)
     else:
@@ -53,10 +51,9 @@ def post_create(request):
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user  # Set the author as the logged-in user
+            post.author = request.user
             post.save()
-            # form.save()  # Save the new post to the database
-            return redirect('post_list')  # Redirect to the list of posts after submission
+            return redirect('post_list')
     else:
         form = PostForm()
     return render(request, 'post_create.html', {'form': form})
@@ -66,9 +63,8 @@ def post_create(request):
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
-    # Ensure the user is the author of the post
     if post.author != request.user:
-        return redirect('post_detail', post_id=post.id)  # Redirect if not the author
+        return redirect('post_detail', post_id=post.id)
 
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
@@ -85,9 +81,8 @@ def post_edit(request, post_id):
 def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
-    # Ensure the user is the author of the post
     if post.author != request.user:
-        return HttpResponseForbidden()  # Return 403 if the user is not the author
+        return HttpResponseForbidden()
 
     if request.method == 'POST':
         post.delete()
@@ -127,7 +122,6 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 
-# Logout view
 def user_logout(request):
     logout(request)
     return redirect('post_list')

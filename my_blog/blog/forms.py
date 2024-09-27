@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']  # Fields to display in the form
+        fields = ['title', 'content']
 
 
 class UserRegisterForm(UserCreationForm):
