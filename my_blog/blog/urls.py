@@ -12,7 +12,9 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
-
-
+    path('tags/', tag_list, name='tag_list'),
+    path('tags/create/', tag_create, name='tag_create'),
+    path('tags/delete/<int:tag_id>/', tag_delete, name='tag_delete'),
 
 ]
+

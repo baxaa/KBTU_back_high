@@ -4,12 +4,13 @@
     <title>{{ post.title }}</title>
 </head>
 <body>
+    {% load cache %}
     <h1>{{ post.title }}</h1>
-    <p>by {{ post.author }} on {{ post.created_at }}</p>
+    <p>by {{ post.author.username }} on {{ post.created_at|date:"F j, Y, g:i a" }}</p>
     <p>{{ post.content }}</p>
 
     <!-- Edit and Delete Options for the Author -->
-    {% if user == post.author %}
+    {% if user.id == post.author.id %}
         <a href="{% url 'post_edit' post_id=post.id %}">Edit</a>
 
         <form method="POST" action="{% url 'post_delete' post_id=post.id %}" style="display:inline;">
@@ -18,17 +19,22 @@
         </form>
     {% endif %}
 
-    <h2>Comments</h2>
+    <!-- Comments Section -->
+    <h2>Comments ({{ comment_count }})</h2>
+    {% cache 60 post_comments post.id %}
     <ul>
         {% for comment in comments %}
             <li>
-                <strong>{{ comment.author }}:</strong> {{ comment.text }} <em>on {{ comment.created_at }}</em>
+                <strong>{{ comment.author.username }}:</strong> {{ comment.text }}
+                <em>on {{ comment.created_at|date:"F j, Y, g:i a" }}</em>
             </li>
         {% empty %}
             <li>No comments yet.</li>
         {% endfor %}
     </ul>
+    {% endcache %}
 
+    <!-- Comment Form -->
     <h2>Leave a Comment</h2>
     {% if user.is_authenticated %}
         <form method="POST">

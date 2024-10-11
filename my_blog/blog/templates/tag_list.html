@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tag List</title>
+</head>
+<body>
+    <h1>Tag List</h1>
+
+    <!-- Display messages (e.g. success, error) -->
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <ul>
+        {% for tag in tags %}
+        <li>{{ tag.name }}
+            <!-- Option to delete each tag -->
+            <a href="{% url 'tag_delete' tag.id %}">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'tag_create' %}">Create New Tag</a>
+</body>
+</html>

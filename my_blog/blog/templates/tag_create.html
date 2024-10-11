@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Tag</title>
+</head>
+<body>
+    <h1>Create a New Tag</h1>
+
+    <!-- Display messages (e.g. success, error) -->
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Tag</button>
+    </form>
+
+    <a href="{% url 'tag_list' %}">Back to Tag List</a>
+</body>
+</html>

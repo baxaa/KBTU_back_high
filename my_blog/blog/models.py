@@ -40,7 +40,7 @@ class Comment(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
+    # updated_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     class Meta:
         indexes = [
             models.Index(fields=['post', 'created_at']),  # Composite index on post and created_at
